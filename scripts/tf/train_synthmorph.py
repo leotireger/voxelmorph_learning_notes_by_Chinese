@@ -55,7 +55,7 @@ p.add_argument('--same-subj', action='store_true', help='generate image pairs fr
 p.add_argument('--blur-std', type=float, default=1, help='maximum blurring std. dev.')
 # --blur-std : 最大模糊标准，如果不进行指定则默认为1
 p.add_argument('--gamma', type=float, default=0.25, help='std. dev. of gamma')
-# 
+#
 p.add_argument('--vel-std', type=float, default=0.5, help='std. dev. of SVF')
 p.add_argument('--vel-res', type=float, nargs='+', default=[16], help='SVF scale')
 p.add_argument('--bias-std', type=float, default=0.3, help='std. dev. of bias field')
