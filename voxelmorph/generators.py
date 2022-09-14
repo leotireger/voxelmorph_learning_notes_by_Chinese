@@ -219,7 +219,7 @@ def template_creation(vol_names, bidir=False, batch_size=1, **kwargs):
         yield (invols, outvols)
 
 
-# def conditional_template_creation(vol_names, atlas, attributes,
+def conditional_template_creation(vol_names, atlas, attributes,
                                   batch_size=1, np_var='vol', pad_shape=None, add_feat_axis=True):
     """
     Generator for conditional template creation.

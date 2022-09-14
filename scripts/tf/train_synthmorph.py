@@ -41,14 +41,21 @@ p = argparse.ArgumentParser(
 
 # data organization parameters
 p.add_argument('--label-dir', nargs='+', help='path or glob pattern pointing to input label maps')
+# --label-dir : 指向输入标签映射的路径或全局模式
 p.add_argument('--model-dir', default='models', help='model output directory')
+# --model-dir : 模型输出目录
 p.add_argument('--log-dir', help='optional TensorBoard log directory')
+# --log-dir : 可选的 TensorBoard 日志目录
 p.add_argument('--sub-dir', help='optional subfolder for logs and model saves')
+# --sub-dir : 日志和模型保存的可选子文件夹
 
 # generation parameters
 p.add_argument('--same-subj', action='store_true', help='generate image pairs from same label map')
+# --same-subj : action='store_true': 当启动程序时必须添加并定义此参数时，用于指定功能 : （是否）从相同的标签映射生成图像对
 p.add_argument('--blur-std', type=float, default=1, help='maximum blurring std. dev.')
+# --blur-std : 最大模糊标准，如果不进行指定则默认为1
 p.add_argument('--gamma', type=float, default=0.25, help='std. dev. of gamma')
+# 
 p.add_argument('--vel-std', type=float, default=0.5, help='std. dev. of SVF')
 p.add_argument('--vel-res', type=float, nargs='+', default=[16], help='SVF scale')
 p.add_argument('--bias-std', type=float, default=0.3, help='std. dev. of bias field')
