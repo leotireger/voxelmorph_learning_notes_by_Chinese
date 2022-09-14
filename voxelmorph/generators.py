@@ -219,7 +219,7 @@ def template_creation(vol_names, bidir=False, batch_size=1, **kwargs):
         yield (invols, outvols)
 
 
-def conditional_template_creation(vol_names, atlas, attributes,
+# def conditional_template_creation(vol_names, atlas, attributes,
                                   batch_size=1, np_var='vol', pad_shape=None, add_feat_axis=True):
     """
     Generator for conditional template creation.
@@ -420,13 +420,15 @@ def surf_semisupervised(
 
 def synthmorph(label_maps, batch_size=1, same_subj=False, flip=True):
     """
-    Generator for SynthMorph registration.
-
+    Generator for SynthMorph registration.  SynthMorph配准生成器
     Parameters:
-        labels_maps: List of pre-loaded ND label maps, each as a NumPy array.
+        labels_maps: List of pre-loaded ND label maps, each as a NumPy array.   
+        labels_maps：预加载的N维标签映射列表，比如一个Numpy矩阵
         batch_size: Batch size. Default is 1.
+        batch_size：批大小，默认为1
         same_subj: Whether the same label map is returned as the source and target for further
             augmentation. Default is False.
+        same_subj：是否返回相同的标签映射作为源和目标以进一步增强。 默认为假。
         flip: Whether axes are flipped randomly. Default is True.
     """
     in_shape = label_maps[0].shape
