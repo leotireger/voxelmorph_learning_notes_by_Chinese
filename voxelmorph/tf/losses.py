@@ -180,10 +180,10 @@ class Dice:
 
 class Grad:
     """
-    N-D gradient loss.
-    loss_mult can be used to scale the loss value - this is recommended if
-    the gradient is computed on a downsampled vector field (where loss_mult
-    is equal to the downsample factor).
+    N-D gradient | loss. N维梯度损失
+    loss_mult can be used to scale the loss value - this is recommended if | loss_mult可用于缩放损失值，这是推荐操作如果
+    the gradient is computed on a downsampled vector field (where loss_mult | 梯度是在下采样的向量场上计算的
+    is equal to the downsample factor). | （其中loss_mult等于下采样因子）
     """
 
     def __init__(self, penalty='l1', loss_mult=None, vox_weight=None):

@@ -139,8 +139,8 @@ gen = vxm.generators.synthmorph(
     flip=True,
 )
 in_shape = label_maps[0].shape
-# 如果out_labels是.npy格式，则
-# 如果out_labels是.pickle格式，则
+# 如果out_labels是.npy格式，则？
+# 如果out_labels是.pickle格式，则？
 if arg.out_labels.endswith('.npy'):
     labels_out = sorted(x for x in np.load(arg.out_labels) if x in labels_in)
 elif arg.out_labels.endswith('.pickle'):
@@ -175,40 +175,41 @@ reg_args = dict(
 
 # build model 创建模型
 strategy = 'MirroredStrategy' if nb_devices > 1 else 'get_strategy'
+# 如果cuda设备数量大于1，使用MirroredStrategy策略，否则使用get_strategy策略
 with getattr(tf.distribute, strategy)().scope():
 
-    # generation
-    gen_model_1 = ne.models.labels_to_image(**gen_args, id=0)
-    gen_model_2 = ne.models.labels_to_image(**gen_args, id=1)
-    ima_1, map_1 = gen_model_1.outputs
-    ima_2, map_2 = gen_model_2.outputs
+    # generation 生成
+    gen_model_1 = ne.models.labels_to_image(**gen_args, id=0)   # ？
+    gen_model_2 = ne.models.labels_to_image(**gen_args, id=1)   # ？
+    ima_1, map_1 = gen_model_1.outputs  # ？
+    ima_2, map_2 = gen_model_2.outputs  # ？
 
-    # registration
-    inputs = gen_model_1.inputs + gen_model_2.inputs
+    # registration  配准
+    inputs = gen_model_1.inputs + gen_model_2.inputs    
     reg_args['inshape'] = ima_1.shape[1:-1]
     reg_args['input_model'] = tf.keras.Model(inputs, outputs=(ima_1, ima_2))
     model = vxm.networks.VxmDense(**reg_args)
     flow = model.references.pos_flow
     pred = vxm.layers.SpatialTransformer(interp_method='linear', name='pred')([map_1, flow])
 
-    # losses and compilation
-    const = tf.ones(shape=arg.batch_size // nb_devices)
-    model.add_loss(vxm.losses.Dice().loss(map_2, pred) + const)
-    model.add_loss(vxm.losses.Grad('l2', loss_mult=arg.reg_param).loss(None, flow))
-    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=arg.lr))
-    model.summary()
+    # losses and compilation    # 损失和编译
+    const = tf.ones(shape=arg.batch_size // nb_devices) # 常亮
+    model.add_loss(vxm.losses.Dice().loss(map_2, pred) + const) # 相似性损失，此处使用的为soft dice
+    model.add_loss(vxm.losses.Grad('l2', loss_mult=arg.reg_param).loss(None, flow)) # 平滑度损失，此处使用的是gradient
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=arg.lr)) # 配置网络的优化器和学习率
+    model.summary()     # 打印模型各层的参数状况
 
 
-# callbacks
-steps_per_epoch = 100
-save_name = os.path.join(arg.model_dir, '{epoch:05d}.h5')
-save = tf.keras.callbacks.ModelCheckpoint(
+# callbacks 回调
+steps_per_epoch = 100   # 每一代有多少步
+save_name = os.path.join(arg.model_dir, '{epoch:05d}.h5')   # 保存为model_dir下"epoch代数.h5"文件
+save = tf.keras.callbacks.ModelCheckpoint(      # 在每个训练期（epoch）后保存模型
     save_name,
     save_freq=steps_per_epoch * arg.save_freq,
 )
-callbacks = [save]
+callbacks = [save]      # 将其保存为list
 
-if arg.log_dir:
+if arg.log_dir:         # 如果定义了log_dir，则使用keras自带的回调保存日志
     log = tf.keras.callbacks.TensorBoard(
         log_dir=arg.log_dir,
         write_graph=False,
@@ -216,11 +217,11 @@ if arg.log_dir:
     callbacks.append(log)
 
 
-# initialize and fit
-if arg.init_weights:
+# initialize and fit 初始化并训练
+if arg.init_weights:    # 如果有初始化权重则载入
     model.load_weights(arg.init_weights)
 model.save(save_name.format(epoch=arg.init_epoch))
-model.fit(
+model.fit(      # 开始训练
     gen,
     initial_epoch=arg.init_epoch,
     epochs=arg.epochs,
