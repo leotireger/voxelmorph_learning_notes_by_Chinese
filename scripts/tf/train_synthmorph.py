@@ -21,7 +21,6 @@ import tensorflow as tf
 import neurite as ne
 import voxelmorph as vxm
 
-
 # reference
 ref = (
     'If you find this script useful, please consider citing:\n\n'
@@ -171,7 +170,6 @@ reg_args = dict(
     svf_resolution=2,
     nb_unet_features=(arg.enc, arg.dec),
 )
-
 
 # build model 创建模型
 strategy = 'MirroredStrategy' if nb_devices > 1 else 'get_strategy'
