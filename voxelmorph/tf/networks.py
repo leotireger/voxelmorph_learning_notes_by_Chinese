@@ -496,6 +496,7 @@ class VxmDenseSemiSupervisedPointCloud(ne.modelio.LoadableModel):
 class InstanceDense(ne.modelio.LoadableModel):
     """
     VoxelMorph network to perform instance-specific optimization.
+    VoxelMorph 网络执行特定于实例的优化。
     """
 
     @ne.modelio.store_config_args
@@ -577,6 +578,7 @@ class InstanceDense(ne.modelio.LoadableModel):
 
 ###############################################################################
 # Probabilistic atlas-based segmentation
+# 基于概率图谱的分割
 ###############################################################################
 
 class ProbAtlasSegmentation(ne.modelio.LoadableModel):
@@ -726,6 +728,7 @@ class ProbAtlasSegmentation(ne.modelio.LoadableModel):
 
 ###############################################################################
 # Template Creation Networks
+# 模板创建网络
 ###############################################################################
 
 class TemplateCreation(ne.modelio.LoadableModel):
@@ -826,6 +829,7 @@ class TemplateCreation(ne.modelio.LoadableModel):
 class ConditionalTemplateCreation(ne.modelio.LoadableModel):
     """
     VoxelMorph network to generate an conditional template image.
+    VoxelMorph 网络生成条件模板图像。
     """
 
     @ne.modelio.store_config_args
