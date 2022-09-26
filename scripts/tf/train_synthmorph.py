@@ -122,7 +122,7 @@ if arg.sub_dir: # 如果有子目录输入，则将模型保存目录放置在su
     arg.model_dir = os.path.join(arg.model_dir, arg.sub_dir)
 os.makedirs(arg.model_dir, exist_ok=True)   # os.makedirs用来创建多层目录，只有在目录不存在时创建目录
 
-if arg.log_dir: # 如果有日志目录输入，则将目录保存目录放置在log_dir中，如果没有此路径则将其新建
+if arg.log_dir: # 如果有指定日志目录，则将目录保存目录放置在log_dir中，如果没有此路径则将其新建
     if arg.sub_dir:
         arg.log_dir = os.path.join(arg.log_dir, arg.sub_dir)
     os.makedirs(arg.log_dir, exist_ok=True)
