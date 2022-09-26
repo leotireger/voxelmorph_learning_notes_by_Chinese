@@ -154,41 +154,40 @@ def save_volfile(array, filename, affine=None):
 
 def load_labels(arg):
     """
-    Load label maps and return a list of unique labels as well as all maps.
-
+    Load label maps and return a list of unique labels as well as all maps. 加载标签地图并返回唯一标签列表以及所有地图。
     Parameters:
         arg: Path to folder containing label maps, string for globbing, or a list of these.
-
+        包含标签映射、用于通配符的字符串或这些列表的文件夹的路径。
     Returns:
-        np.array: List of unique labels.
-        list: List of label maps, each as a np.array.
+        np.array: List of unique labels.唯一标签列表
+        list: List of label maps, each as a np.array.标签映射列表，每个都是一个np.array矩阵。
     """
-    if not isinstance(arg, (tuple, list)):
+    if not isinstance(arg, (tuple, list)):  # 如果arg不是数组或是列表，将其改为列表
         arg = [arg]
 
-    # List files.
+    # List files.   获得在指定路径的指定后缀的文件，将这些文件的文件路径组成列表
     import glob
     ext = ('.nii.gz', '.nii', '.mgz', '.npy', '.npz')
     files = [os.path.join(f, '*') if os.path.isdir(f) else f for f in arg]
     files = sum((glob.glob(f) for f in files), [])
     files = [f for f in files if f.endswith(ext)]
 
-    # Load labels.
+    # Load labels.  载入文件
     if len(files) == 0:
         raise ValueError(f'no labels found for argument "{files}"')
     label_maps = []
     shape = None
     for f in files:
-        x = np.squeeze(load_volfile(f))
-        if shape is None:
+        x = np.squeeze(load_volfile(f))     # 将等于1的维度去掉
+        if shape is None:   # 指定shape为数组的shape
             shape = np.shape(x)
-        if not np.issubdtype(x.dtype, np.integer):
+        if not np.issubdtype(x.dtype, np.integer):  # 如果x的数据类型不是整数，报错
             raise ValueError(f'file "{f}" has non-integral data type')
-        if not np.all(x.shape == shape):
+        if not np.all(x.shape == shape):    # 如果所有数据的形状不一致，报错
             raise ValueError(f'shape {x.shape} of file "{f}" is not {shape}')
-        label_maps.append(x)
+        label_maps.append(x)    # 通过验证后，将其加入到label_maps
 
-    return np.unique(label_maps), label_maps
+    return np.unique(label_maps), label_maps    # 返回去除数组中的重复的label_maps，并进行排序之后输出 以及 完整的label_maps 
 
 
 def load_pheno_csv(filename, training_files=None):

@@ -82,7 +82,7 @@ p.add_argument('--batch-size', type=int, default=1, help='batch size')
 # --batch-size: 指定批大小，默认为1
 p.add_argument('--init-weights', help='optional weights file to initialize with')
 #　--init-weight: 用于初始化的可选权重文件
-p.add_argument('--save-freq', type=int, default=20, help='epochs between model saves')
+p.add_argument('--save-freq', type=int, default=300, help='epochs between model saves')
 # --save-freq: 模型保存的频率
 p.add_argument('--reg-param', type=float, default=1., help='regularization weight')
 # --reg-param: 正则化权重,默认为 1
@@ -126,7 +126,6 @@ if arg.log_dir: # 如果有指定日志目录，则将目录保存目录放置�
     if arg.sub_dir:
         arg.log_dir = os.path.join(arg.log_dir, arg.sub_dir)
     os.makedirs(arg.log_dir, exist_ok=True)
-
 
 # labels and label maps 标签和标签映射
 labels_in, label_maps = vxm.py.utils.load_labels(arg.label_dir) # 加载标签映射并返回唯一标签列表以及所有标签映射，后者为ndarray格式
