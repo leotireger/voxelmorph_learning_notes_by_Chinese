@@ -118,17 +118,15 @@ assert tf.__version__.startswith('2'), f'TensorFlow version {tf.__version__} is 
 
 
 # prepare directories   准备字典
-if arg.sub_dir: # 如果有子目录输入，则将模型保存目录放置在sub_dir中，如果没有此路径则将其新建
-    arg.model_dir = os.path.join(arg.model_dir, arg.sub_dir)
-os.makedirs(arg.model_dir, exist_ok=True)   # os.makedirs用来创建多层目录，只有在目录不存在时创建目录
+sub_dir = "sub_dir"
+model_dir = r"C:\Users\LeoHuang_redmiG\OneDrive\pythonProject\Liver_CT\preprocessed data\model"
+model_dir = os.path.join(model_dir, sub_dir)
+os.makedirs(model_dir, exist_ok=True)   # os.makedirs用来创建多层目录，只有在目录不存在时创建目录
 
-if arg.log_dir: # 如果有指定日志目录，则将目录保存目录放置在log_dir中，如果没有此路径则将其新建
-    if arg.sub_dir:
-        arg.log_dir = os.path.join(arg.log_dir, arg.sub_dir)
-    os.makedirs(arg.log_dir, exist_ok=True)
 
 # labels and label maps 标签和标签映射
-labels_in, label_maps = vxm.py.utils.load_labels(arg.label_dir) # 加载标签映射并返回唯一标签列表以及所有标签映射，后者为ndarray格式
+# labels_in, label_maps = vxm.py.utils.load_labels(arg.label_dir) # 加载标签映射并返回唯一标签列表以及所有标签映射，后者为ndarray格式
+labels_in, label_maps = vxm.py.utils.load_labels(r"C:\Users\LeoHuang_redmiG\OneDrive\pythonProject\Liver_CT\preprocessed data\downsampled")
 # 生成器 gen
 gen = vxm.generators.synthmorph(
     label_maps,
@@ -199,19 +197,26 @@ with getattr(tf.distribute, strategy)().scope():
 
 # callbacks 回调
 steps_per_epoch = 100   # 每一代有多少步
-save_name = os.path.join(arg.model_dir, '{epoch:05d}.h5')   # 保存为model_dir下"epoch代数.h5"文件
+model_dir = r"C:\Users\LeoHuang_redmiG\OneDrive\pythonProject\Liver_CT\preprocessed data\model"
+save_name = os.path.join(model_dir, '{epoch:05d}.h5')   # 保存为model_dir下"epoch代数.h5"文件
+# save_name = os.path.join(arg.model_dir, '{epoch:05d}.h5')   # 保存为model_dir下"epoch代数.h5"文件
 save = tf.keras.callbacks.ModelCheckpoint(      # 在每个训练期（epoch）后保存模型
     save_name,
     save_freq=steps_per_epoch * arg.save_freq,
 )
 callbacks = [save]      # 将其保存为list
 
-if arg.log_dir:         # 如果定义了log_dir，则使用keras自带的回调保存日志
-    log = tf.keras.callbacks.TensorBoard(
-        log_dir=arg.log_dir,
-        write_graph=False,
-    )
-    callbacks.append(log)
+# if arg.log_dir:         # 如果定义了log_dir，则使用keras自带的回调保存日志
+#     log = tf.keras.callbacks.TensorBoard(
+#         log_dir=arg.log_dir,
+#         write_graph=False,
+#     )
+#     callbacks.append(log)
+log = tf.keras.callbacks.TensorBoard(
+    log_dir=r"C:\Users\LeoHuang_redmiG\OneDrive\pythonProject\Liver_CT\preprocessed data\log_dir",
+    write_graph=False,
+)
+callbacks.append(log)
 
 
 # initialize and fit 初始化并训练
